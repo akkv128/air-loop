@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AK GROUPS - Next-Gen Athletic Wear</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter for a modern, bold look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom styles for dark mode, neon accents, and subtle animations */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a; /* Deep dark background */
+            color: #e0e0e0; /* Light text for contrast */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Neon accent color */
+        .neon-blue {
+            color: #00eaff; /* Bright cyan/blue */
+        }
+        .bg-neon-blue {
+            background-color: #00eaff;
+        }
+        .border-neon-blue {
+            border-color: #00eaff;
+        }
+        .ring-neon-blue {
+            --tw-ring-color: #00eaff;
+        }
+
+        /* Custom scrollbar for a futuristic feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00eaff;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00c0d0;
+        }
+
+        /* Parallax effect base */
+        .parallax-section {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Hero slideshow specific styles */
+        .hero-slide {
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: opacity 1s ease-in-out;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+        .hero-slide.active {
+            opacity: 1;
+            position: relative; /* Bring active slide to flow */
+        }
+
+        /* Mega menu specific styles */
+        .mega-menu-content {
+            display: none;
+            position: absolute;
+            left: 0;
+            width: 100%;
+            background-color: rgba(10, 10, 10, 0.95); /* Semi-transparent dark background */
+            padding: 2rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            border-top: 1px solid rgba(0, 234, 255, 0.2); /* Subtle neon border */
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .nav-item:hover .mega-menu-content {
+            display: block;
+        }
+
+        /* Keyframe for fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Product card hover effects */
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 234, 255, 0.2); /* Neon shadow on hover */
+        }
+        .product-card .quick-view-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .product-card:hover .quick-view-overlay {
+            opacity: 1;
+        }
+
+        /* Button depth and shadow */
+        .btn-primary {
+            position: relative;
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px; /* Pill shape */
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 5px 15px rgba(0, 234, 255, 0.3); /* Initial neon shadow */
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s ease-in-out;
+            z-index: -1;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 234, 255, 0.5); /* Enhanced neon shadow on hover */
+            background-color: #00c0d0; /* Slightly darker neon blue on hover */
+        }
+
+        /* Floating CTA */
+        .floating-cta {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        /* Modal animations */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal-content {
+            animation: slideInTop 0.4s ease-out;
+        }
+        @keyframes slideInTop {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Newsletter popup */
+        .newsletter-popup {
+            animation: slideInBottom 0.5s ease-out;
+        }
+        @keyframes slideInBottom {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Sticky Navigation Bar -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-[1000] bg-black bg-opacity-80 backdrop-blur-md py-4 transition-all duration-300 ease-in-out border-b border-gray-800">
+        <nav class="container mx-auto px-6 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="text-3xl font-extrabold neon-blue tracking-wider uppercase">AK GROUPS</a>
+
+            <!-- Desktop Navigation Links (Mega Menu) -->
+            <ul class="hidden lg:flex items-center space-x-8">
+                <li class="relative nav-item group">
+                    <a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-lg font-medium">Collections</a>
+                    <div class="mega-menu-content hidden group-hover:block">
+                        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div>
+                                <h3 class="text-xl font-bold neon-blue mb-4">Shop By Category</h3>
+                                <ul class="space-y-2">
+                                    <li><a href="#" class="text-gray-300 hover:neon-blue transition-colors">New Arrivals</a></li>
+                                    <li><a href="#" class="text-gray-300 hover:neon-blue transition-colors">Best Sellers</a></li>
+                                    <li><a href="#" class="text-gray-300 hover:neon-blue transition-colors">Limited Editions</a></li>
+                                    <li><a href="#" class="text-gray-300 hover:neon-blue transition-colors">Sale</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold neon-blue mb-4">Shop By Sport</h3>
+                                <ul class="space-y-2">
+                                    <li><a href="#" class="text-gray-300 hover:neon-blue transition-colors">Running</a></li>
+                                    <li><a href="#" class="text-gray-300 hover:neon-blue transition-colors">Training</a></li>
+                                    <li><a href="#" class="text-gray-300 hover:neon-blue transition-colors">Basketball</a></li>
+                                    <li><a href="#" class="text-gray-300 hover:neon-blue transition-colors">Lifestyle</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold neon-blue mb-4">Featured</h3>
+                                <img src="https://placehold.co/300x200/0f0f0f/00eaff?text=Mega+Menu+Ad" alt="Mega Menu Ad" class="rounded-lg shadow-lg mb-4">
+                                <p class="text-gray-400 text-sm">Explore our cutting-edge designs and performance gear.</p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-lg font-medium">Men</a></li>
+                <li><a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-lg font-medium">Women</a></li>
+                <li><a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-lg font-medium">Accessories</a></li>
+                <li><a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-lg font-medium">About Us</a></li>
+            </ul>
+
+            <!-- Right-aligned Icons -->
+            <div class="flex items-center space-x-6">
+                <button class="text-white hover:neon-blue transition-colors duration-200 text-xl" onclick="openModal('signInModal')">
+                    <i class="fas fa-user"></i>
+                </button>
+                <button class="text-white hover:neon-blue transition-colors duration-200 text-xl">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="text-white hover:neon-blue transition-colors duration-200 text-xl relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="absolute -top-2 -right-2 bg-neon-blue text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <!-- Mobile Menu Toggle -->
+                <button id="mobile-menu-button" class="lg:hidden text-white hover:neon-blue transition-colors duration-200 text-xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-gray-950 z-[1010] shadow-2xl flex flex-col pt-20">
+        <button id="close-mobile-menu" class="absolute top-4 right-4 text-white text-2xl hover:neon-blue transition-colors">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul class="flex flex-col p-6 space-y-4">
+            <li><a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-xl font-medium py-2 block">Collections</a></li>
+            <li><a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-xl font-medium py-2 block">Men</a></li>
+            <li><a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-xl font-medium py-2 block">Women</a></li>
+            <li><a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-xl font-medium py-2 block">Accessories</a></li>
+            <li><a href="#" class="text-white hover:neon-blue transition-colors duration-200 text-xl font-medium py-2 block">About Us</a></li>
+            <li><button class="text-white hover:neon-blue transition-colors duration-200 text-xl font-medium py-2 block text-left" onclick="openModal('signInModal'); closeMobileMenu();">Sign In</button></li>
+        </ul>
+    </div>
+
+
+    <!-- Hero Section - Full Screen Slideshow -->
+    <section id="hero-section" class="relative h-screen overflow-hidden">
+        <div class="hero-slide active" style="background-image: url('https://placehold.co/1920x1080/0f0f0f/00eaff?text=AK+GROUPS+Performance');">
+            <div class="relative z-10 text-white p-8 bg-black bg-opacity-40 rounded-lg max-w-3xl mx-auto">
+                <h1 class="text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+                    <span class="neon-blue">UNLEASH</span> YOUR POTENTIAL
+                </h1>
+                <p class="text-xl md:text-2xl mb-10 font-light max-w-2xl mx-auto">
+                    Experience the future of athletic wear. Engineered for peak performance, designed for the bold.
+                </p>
+                <a href="#featured-collections" class="btn-primary bg-neon-blue text-black hover:bg-opacity-90">
+                    Shop New Arrivals
+                </a>
+            </div>
+        </div>
+        <div class="hero-slide" style="background-image: url('https://placehold.co/1920x1080/1a1a1a/00eaff?text=AK+GROUPS+Innovation');">
+            <div class="relative z-10 text-white p-8 bg-black bg-opacity-40 rounded-lg max-w-3xl mx-auto">
+                <h1 class="text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+                    INNOVATION <span class="neon-blue">REDEFINED</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-10 font-light max-w-2xl mx-auto">
+                    Push boundaries with gear that adapts to your every move.
+                </p>
+                <a href="#featured-collections" class="btn-primary bg-neon-blue text-black hover:bg-opacity-90">
+                    Explore Collections
+                </a>
+            </div>
+        </div>
+        <div class="hero-slide" style="background-image: url('https://placehold.co/1920x1080/0f0f0f/00eaff?text=AK+GROUPS+Style');">
+            <div class="relative z-10 text-white p-8 bg-black bg-opacity-40 rounded-lg max-w-3xl mx-auto">
+                <h1 class="text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+                    STYLE <span class="neon-blue">MEETS</span> STRENGTH
+                </h1>
+                <p class="text-xl md:text-2xl mb-10 font-light max-w-2xl mx-auto">
+                    Dominate your training while making a statement.
+                </p>
+                <a href="#featured-collections" class="btn-primary bg-neon-blue text-black hover:bg-opacity-90">
+                    Shop The Look
+                </a>
+            </div>
+        </div>
+        <!-- Hero Section Overlay for dark effect -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+    </section>
+
+    <!-- Featured Collections Section -->
+    <section id="featured-collections" class="py-20 bg-black relative z-10">
+        <div class="container mx-auto px-6">
+            <h2 class="text-5xl font-extrabold text-center mb-16 neon-blue uppercase tracking-wide">Featured Collections</h2>
+
+            <!-- New Arrivals -->
+            <div class="mb-20">
+                <h3 class="text-4xl font-bold mb-10 text-center text-white">New Arrivals <span class="neon-blue">//</span></h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Product Card 1 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Quantum+Jacket" alt="Quantum Jacket" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Quantum Jacket</h4>
+                                <p class="text-gray-400 text-lg mb-4">Men's Performance Outerwear</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$189.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                    <!-- Product Card 2 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Velocity+Leggings" alt="Velocity Leggings" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Velocity Leggings</h4>
+                                <p class="text-gray-400 text-lg mb-4">Women's Training Gear</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$89.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                    <!-- Product Card 3 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Aura+Sneakers" alt="Aura Sneakers" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Aura Sneakers</h4>
+                                <p class="text-gray-400 text-lg mb-4">Unisex Running Shoes</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$229.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                    <!-- Product Card 4 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Pulse+Tee" alt="Pulse Tee" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Pulse Tee</h4>
+                                <p class="text-gray-400 text-lg mb-4">Men's Training Top</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$59.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Sellers -->
+            <div class="mb-20">
+                <h3 class="text-4xl font-bold mb-10 text-center text-white">Best Sellers <span class="neon-blue">//</span></h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Product Card 5 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Apex+Shorts" alt="Apex Shorts" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Apex Shorts</h4>
+                                <p class="text-gray-400 text-lg mb-4">Unisex Training Shorts</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$79.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                    <!-- Product Card 6 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Zenith+Bra" alt="Zenith Bra" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Zenith Bra</h4>
+                                <p class="text-gray-400 text-lg mb-4">Women's Sports Bra</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$64.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                    <!-- Product Card 7 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Fusion+Hoodie" alt="Fusion Hoodie" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Fusion Hoodie</h4>
+                                <p class="text-gray-400 text-lg mb-4">Unisex Lifestyle Hoodie</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$129.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                    <!-- Product Card 8 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Vortex+Cap" alt="Vortex Cap" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Vortex Cap</h4>
+                                <p class="text-gray-400 text-lg mb-4">Unisex Training Cap</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$34.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action Banner -->
+            <div class="relative bg-gradient-to-br from-gray-900 to-black rounded-xl p-16 text-center shadow-2xl overflow-hidden mb-20">
+                <div class="absolute inset-0 bg-cover bg-center opacity-20" style="background-image: url('https://placehold.co/1920x400/0f0f0f/00eaff?text=Unleash+Your+Power');"></div>
+                <div class="relative z-10">
+                    <h2 class="text-5xl md:text-6xl font-extrabold neon-blue mb-6 leading-tight">
+                        ELEVATE YOUR GAME
+                    </h2>
+                    <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto">
+                        Discover our full range of performance-driven athletic wear designed to help you achieve your goals.
+                    </p>
+                    <a href="#" class="btn-primary bg-neon-blue text-black hover:bg-opacity-90">
+                        Shop All Products
+                    </a>
+                </div>
+            </div>
+
+            <!-- Lifestyle Collection -->
+            <div class="mb-20">
+                <h3 class="text-4xl font-bold mb-10 text-center text-white">Lifestyle <span class="neon-blue">//</span></h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Product Card 9 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Urban+Joggers" alt="Urban Joggers" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Urban Joggers</h4>
+                                <p class="text-gray-400 text-lg mb-4">Comfort Meets Style</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$99.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                    <!-- Product Card 10 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Flow+Tank" alt="Flow Tank" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Flow Tank</h4>
+                                <p class="text-gray-400 text-lg mb-4">Lightweight & Breathable</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$49.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                    <!-- Product Card 11 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Street+Sneakers" alt="Street Sneakers" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Street Sneakers</h4>
+                                <p class="text-gray-400 text-lg mb-4">Everyday Urban Footwear</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$159.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                    <!-- Product Card 12 -->
+                    <div class="product-card bg-gray-900 rounded-xl shadow-xl flex flex-col overflow-hidden">
+                        <img src="https://placehold.co/600x400/1a1a1a/00eaff?text=Chill+Pants" alt="Chill Pants" class="w-full h-64 object-cover object-center transition-transform duration-300 group-hover:scale-110">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-2xl font-bold text-white mb-2">Chill Pants</h4>
+                                <p class="text-gray-400 text-lg mb-4">Relaxed Fit Comfort</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl font-extrabold neon-blue">$84.99</span>
+                                <button class="bg-gray-800 text-white px-5 py-2 rounded-full hover:bg-neon-blue hover:text-black transition-all duration-300 text-lg font-semibold">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="quick-view-overlay">
+                            <button class="bg-neon-blue text-black px-6 py-3 rounded-full text-lg font-bold mb-4 hover:scale-105 transition-transform">Quick View</button>
+                            <button class="bg-transparent border border-white text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-white hover:text-black transition-colors">Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Product Page Section (Simulated) -->
+    <section id="product-detail" class="py-20 bg-gray-950">
+        <div class="container mx-auto px-6">
+            <h2 class="text-5xl font-extrabold text-center mb-16 neon-blue uppercase tracking-wide">Product Spotlight</h2>
+
+            <div class="lg:flex lg:space-x-12 items-start">
+                <!-- Image Gallery -->
+                <div class="lg:w-1/2 mb-10 lg:mb-0">
+                    <img id="main-product-image" src="https://placehold.co/800x600/1a1a1a/00eaff?text=Aura+Sneakers+Main" alt="Aura Sneakers Main" class="w-full rounded-xl shadow-2xl mb-6">
+                    <div class="grid grid-cols-4 gap-4">
+                        <img src="https://placehold.co/200x150/1a1a1a/00eaff?text=Aura+1" alt="Aura Sneaker 1" class="w-full h-24 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-neon-blue transition-all duration-200" onclick="changeMainImage(this.src)">
+                        <img src="https://placehold.co/200x150/1a1a1a/00eaff?text=Aura+2" alt="Aura Sneaker 2" class="w-full h-24 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-neon-blue transition-all duration-200" onclick="changeMainImage(this.src)">
+                        <img src="https://placehold.co/200x150/1a1a1a/00eaff?text=Aura+3" alt="Aura Sneaker 3" class="w-full h-24 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-neon-blue transition-all duration-200" onclick="changeMainImage(this.src)">
+                        <img src="https://placehold.co/200x150/1a1a1a/00eaff?text=Aura+4" alt="Aura Sneaker 4" class="w-full h-24 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-neon-blue transition-all duration-200" onclick="changeMainImage(this.src)">
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="lg:w-1/2">
+                    <h3 class="text-5xl font-extrabold text-white mb-4">Aura Sneakers</h3>
+                    <p class="text-2xl neon-blue font-semibold mb-6">$229.99</p>
+                    <p class="text-gray-300 text-lg leading-relaxed mb-8">
+                        Experience unparalleled comfort and futuristic design with the Aura Sneakers. Engineered with responsive cushioning and a breathable knit upper, these shoes provide superior support for both your runs and your daily adventures. Lightweight, durable, and undeniably stylish.
+                    </p>
+
+                    <!-- Size Selection -->
+                    <div class="mb-8">
+                        <label for="size-select" class="block text-xl font-bold text-white mb-3">Select Size:</label>
+                        <div class="flex flex-wrap gap-3">
+                            <button class="size-btn px-6 py-3 rounded-full border border-gray-700 text-white hover:bg-neon-blue hover:text-black transition-colors duration-200 text-lg font-medium" data-size="7">US 7</button>
+                            <button class="size-btn px-6 py-3 rounded-full border border-gray-700 text-white hover:bg-neon-blue hover:text-black transition-colors duration-200 text-lg font-medium" data-size="8">US 8</button>
+                            <button class="size-btn px-6 py-3 rounded-full border border-gray-700 text-white hover:bg-neon-blue hover:text-black transition-colors duration-200 text-lg font-medium" data-size="9">US 9</button>
+                            <button class="size-btn px-6 py-3 rounded-full border border-gray-700 text-white hover:bg-neon-blue hover:text-black transition-colors duration-200 text-lg font-medium" data-size="10">US 10</button>
+                            <button class="size-btn px-6 py-3 rounded-full border border-gray-700 text-white hover:bg-neon-blue hover:text-black transition-colors duration-200 text-lg font-medium" data-size="11">US 11</button>
+                            <button class="size-btn px-6 py-3 rounded-full border border-gray-700 text-white hover:bg-neon-blue hover:text-black transition-colors duration-200 text-lg font-medium" data-size="12">US 12</button>
+                        </div>
+                        <button class="text-neon-blue text-lg font-medium mt-4 hover:underline" onclick="openModal('sizeGuideModal')">Size Guide</button>
+                    </div>
+
+                    <!-- Quick Add to Cart -->
+                    <button class="btn-primary bg-neon-blue text-black w-full py-4 text-2xl font-bold mb-8">
+                        Add to Cart <i class="fas fa-arrow-right ml-3"></i>
+                    </button>
+
+                    <!-- Customer Reviews -->
+                    <div>
+                        <h4 class="text-3xl font-bold text-white mb-6">Customer Reviews</h4>
+                        <div class="bg-gray-900 p-6 rounded-xl shadow-lg mb-4">
+                            <div class="flex items-center mb-2">
+                                <span class="text-yellow-400 text-xl mr-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
+                                <span class="text-gray-400 text-lg">4.5 / 5 stars</span>
+                            </div>
+                            <p class="text-gray-300 text-lg mb-3">"These are the most comfortable shoes I've ever owned! Perfect for running and everyday wear. Plus, they look amazing."</p>
+                            <p class="text-gray-500 text-sm">- Alex K.</p>
+                        </div>
+                        <div class="bg-gray-900 p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-2">
+                                <span class="text-yellow-400 text-xl mr-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                                <span class="text-gray-400 text-lg">4 / 5 stars</span>
+                            </div>
+                            <p class="text-gray-300 text-lg mb-3">"Great design and very supportive. A bit pricey, but worth it for the quality."</p>
+                            <p class="text-gray-500 text-sm">- Sarah L.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating CTA (Shop Now) -->
+    <a href="#featured-collections" class="floating-cta btn-primary bg-neon-blue text-black px-8 py-4 text-xl font-bold shadow-2xl">
+        Shop Now <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+
+    <!-- Sign In/Register Modal -->
+    <div id="signInModal" class="modal-overlay fixed inset-0 flex items-center justify-center z-[1100] hidden">
+        <div class="modal-content bg-gray-900 p-10 rounded-xl shadow-2xl max-w-md w-full relative border border-neon-blue">
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl" onclick="closeModal('signInModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3 class="text-4xl font-extrabold neon-blue mb-8 text-center">Sign In / Register</h3>
+            <form class="space-y-6">
+                <div>
+                    <label for="email" class="block text-gray-300 text-lg font-medium mb-2">Email Address</label>
+                    <input type="email" id="email" class="w-full p-4 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-neon-blue focus:border-transparent transition-all duration-200" placeholder="your@example.com">
+                </div>
+                <div>
+                    <label for="password" class="block text-gray-300 text-lg font-medium mb-2">Password</label>
+                    <input type="password" id="password" class="w-full p-4 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-neon-blue focus:border-transparent transition-all duration-200" placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary bg-neon-blue text-black w-full py-4 text-xl font-bold">
+                    Sign In
+                </button>
+                <p class="text-center text-gray-400">Don't have an account? <a href="#" class="neon-blue hover:underline">Register Now</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Size Guide Modal -->
+    <div id="sizeGuideModal" class="modal-overlay fixed inset-0 flex items-center justify-center z-[1100] hidden">
+        <div class="modal-content bg-gray-900 p-10 rounded-xl shadow-2xl max-w-2xl w-full relative border border-neon-blue">
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl" onclick="closeModal('sizeGuideModal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3 class="text-4xl font-extrabold neon-blue mb-8 text-center">Size Guide</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-gray-300 border-collapse">
+                    <thead class="text-lg uppercase bg-gray-800 neon-blue">
+                        <tr>
+                            <th scope="col" class="py-3 px-6 rounded-tl-lg">US Size</th>
+                            <th scope="col" class="py-3 px-6">EU Size</th>
+                            <th scope="col" class="py-3 px-6">Foot Length (cm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-4 px-6">7</td>
+                            <td class="py-4 px-6">40</td>
+                            <td class="py-4 px-6">25.0</td>
+                        </tr>
+                        <tr class="border-b border-gray-700 bg-gray-850">
+                            <td class="py-4 px-6">8</td>
+                            <td class="py-4 px-6">41</td>
+                            <td class="py-4 px-6">26.0</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-4 px-6">9</td>
+                            <td class="py-4 px-6">42</td>
+                            <td class="py-4 px-6">27.0</td>
+                        </tr>
+                        <tr class="border-b border-gray-700 bg-gray-850">
+                            <td class="py-4 px-6">10</td>
+                            <td class="py-4 px-6">43</td>
+                            <td class="py-4 px-6">28.0</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-4 px-6">11</td>
+                            <td class="py-4 px-6">44</td>
+                            <td class="py-4 px-6">29.0</td>
+                        </tr>
+                        <tr class="bg-gray-850">
+                            <td class="py-4 px-6 rounded-bl-lg">12</td>
+                            <td class="py-4 px-6">45</td>
+                            <td class="py-4 px-6">30.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-gray-400 text-sm mt-6 text-center">
+                Measurements are approximate. For best fit, please refer to our detailed sizing chart on each product page.
+            </p>
+        </div>
+    </div>
+
+    <!-- Newsletter Popup -->
+    <div id="newsletterPopup" class="newsletter-popup fixed bottom-0 left-1/2 -translate-x-1/2 w-11/12 md:w-auto bg-gray-900 p-8 rounded-t-xl shadow-2xl z-[1050] hidden border-t border-neon-blue">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl" onclick="closeModal('newsletterPopup')">
+            <i class="fas fa-times"></i>
+        </button>
+        <h3 class="text-3xl font-extrabold neon-blue mb-4 text-center">Stay Ahead of The Game!</h3>
+        <p class="text-gray-300 text-lg mb-6 text-center">
+            Sign up for our newsletter to get exclusive access to new drops, promotions, and insider news.
+        </p>
+        <form class="flex flex-col md:flex-row gap-4">
+            <input type="email" class="flex-grow p-4 rounded-lg bg-gray-800 text-white border border-gray-700 focus:ring-2 focus:ring-neon-blue focus:border-transparent transition-all duration-200" placeholder="Enter your email">
+            <button type="submit" class="btn-primary bg-neon-blue text-black px-6 py-4 text-lg font-bold">
+                Subscribe
+            </button>
+        </form>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 py-16 border-t border-gray-800">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-12">
+            <!-- Brand Info -->
+            <div>
+                <h3 class="text-3xl font-extrabold neon-blue mb-6 uppercase tracking-wider">AK GROUPS</h3>
+                <p class="text-gray-400 text-md leading-relaxed mb-6">
+                    Redefining athletic wear with cutting-edge design and unparalleled performance. For the next generation of athletes.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:neon-blue text-2xl transition-colors"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-400 hover:neon-blue text-2xl transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:neon-blue text-2xl transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-400 hover:neon-blue text-2xl transition-colors"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-xl font-bold text-white mb-6">Quick Links</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">New Arrivals</a></li>
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">Men's Collection</a></li>
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">Women's Collection</a></li>
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">Sale</a></li>
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">Blog</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Service -->
+            <div>
+                <h4 class="text-xl font-bold text-white mb-6">Customer Service</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">Contact Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">FAQs</a></li>
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">Shipping & Returns</a></li>
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:neon-blue transition-colors">Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <!-- Store Locator -->
+            <div>
+                <h4 class="text-xl font-bold text-white mb-6">Store Locator</h4>
+                <p class="text-gray-400 text-md mb-4">Find an AK GROUPS store near you.</p>
+                <form class="flex">
+                    <input type="text" placeholder="Enter your city or ZIP" class="p-3 rounded-l-lg bg-gray-800 text-white border border-gray-700 focus:ring-1 focus:ring-neon-blue focus:border-transparent w-full">
+                    <button type="submit" class="bg-neon-blue text-black px-5 rounded-r-lg hover:bg-opacity-90 transition-colors">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-16 text-center text-gray-500 text-sm border-t border-gray-800 pt-8">
+            &copy; 2025 AK GROUPS. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- JavaScript for interactivity -->
+    <script>
+        // Hero Slideshow
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // Auto-advance slides every 5 seconds
+        setInterval(nextSlide, 5000);
+
+        // Initial slide display
+        showSlide(currentSlide);
+
+        // Sticky Navigation
+        const navbar = document.getElementById('navbar');
+        let lastScrollY = window.scrollY;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) { // After scrolling 100px down
+                navbar.classList.add('py-3', 'shadow-xl');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.remove('py-3', 'shadow-xl');
+                navbar.classList.add('py-4');
+            }
+
+            // Optional: Hide/show nav on scroll down/up
+            // if (window.scrollY > lastScrollY && window.scrollY > 200) {
+            //     navbar.style.transform = 'translateY(-100%)';
+            // } else {
+            //     navbar.style.transform = 'translateY(0)';
+            // }
+            // lastScrollY = window.scrollY;
+        });
+
+        // Modals (Sign In, Size Guide, Newsletter)
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.classList.add('overflow-hidden'); // Prevent scrolling body
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Show newsletter popup after 5 seconds
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                openModal('newsletterPopup');
+            }, 5000);
+        });
+
+        // Product Page Image Gallery
+        function changeMainImage(src) {
+            document.getElementById('main-product-image').src = src;
+        }
+
+        // Product Size Selection
+        document.querySelectorAll('.size-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.size-btn').forEach(btn => {
+                    btn.classList.remove('bg-neon-blue', 'text-black', 'ring-2', 'ring-neon-blue');
+                    btn.classList.add('bg-gray-800', 'text-white', 'border-gray-700');
+                });
+                button.classList.add('bg-neon-blue', 'text-black', 'ring-2', 'ring-neon-blue');
+                button.classList.remove('bg-gray-800', 'text-white', 'border-gray-700');
+                // You can add logic here to store the selected size
+                console.log('Selected size:', button.dataset.size);
+            });
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+            document.body.classList.add('overflow-hidden');
+        });
+
+        closeMobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            document.body.classList.remove('overflow-hidden');
+        });
+
+        // Close mobile menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                document.body.classList.remove('overflow-hidden');
+            });
+        });
+
+        // Helper function to close mobile menu (used by modal close)
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+        }
+
+    </script>
+</body>
+</html>
